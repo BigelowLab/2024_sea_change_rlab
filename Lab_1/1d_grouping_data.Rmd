@@ -1,0 +1,77 @@
+---
+title: 'Lab1D: Grouping Variables'
+output:
+  pdf_document: default
+  html_document: default
+date: "2024-09-16"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Setup
+
+Load libraries and data
+
+```{r}
+library(tidyverse)
+data <- read.csv("seachange2024_DARTs_data_240916.csv", header = TRUE)
+str(data)
+```
+
+
+## Calculating basic information and statistics
+
+It's relatively straight forward to calculate basic statistics from the data. For example to get the mean and standard deviation from all salinity measurements:
+
+```{r}
+mean(data$salinity)
+sd(data$salinity)
+```
+
+Other functions you could play with include: 
+min()
+max()
+median()
+
+## Subsetting your data
+
+You might want to group the data before calculating these statistics. For this, you can use the groupby function.  For example, say we want to group the data by station and then calculation mean salinity. This is how we do this:
+
+```{r}
+sal_summary <- data |> group_by(stn) |> summarize(mean_salinity = mean(salinity), sd_sal = sd(salinity))
+sal_summary
+```
+
+You can also filter a table before running these summary calculations if you only want to target specific measurements. For example, if you want to examine the salinity for everything above 10m, this is how you would do it:
+
+```{r}
+sal_above_10 <- data |> filter(depth <= 10) |> group_by(stn) |> summarize(mean_salinity = mean(salinity), sd_salinity = sd(salinity))
+sal_above_10
+```
+
+
+## Visualizing grouped calculations
+
+There are some graphing functions that can help you visualize group statistics. One super helpful one is making boxplots.  To do this with ggplot:
+
+```{r}
+ggplot(data, aes(x = as.factor(stn), y = salinity, fill = as.factor(stn))) +
+  geom_boxplot() + 
+  xlab('Station #') + 
+  labs(fill = 'Station #')
+```
+
+David's Assignment Part 2:
+
+2) Calculate the average Temperature (+/- STD) in the upper water column between 1-3m for all 4 stations.  Plot that data with station on the X-axis. 
+
+Substitute geom_boxplot with other ggplot functions such as: 
+geom_violin
+geom_jitter
+
+Be sure to label the Axes and put in the correct units.
+
+
+

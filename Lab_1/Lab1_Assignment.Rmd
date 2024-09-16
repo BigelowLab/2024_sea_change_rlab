@@ -1,0 +1,36 @@
+---
+title: "Lab1_Assignment"
+output:
+  html_document: default
+  pdf_document: default
+date: "2024-09-16"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Open up the file: "DARTS_cruise_data_2012-2020 - 20201103.xlsx", create a new table for R that reformats the data within the tab "CTD all years" into a csv file that can be read by R. 
+
+Create an R Notebook which imports the DaRTS CTD data, and produces the 3 following figures:
+
+1. A temperature profile for Station 1 from the Cruise on Sept 11th 2012.
+
+    *Hint:* you'll need to **filter** your data frame. Check out [this lesson from the Data Carpentry R ecology course](https://datacarpentry.org/R-ecology-lesson/03-dplyr.html#Selecting_columns_and_filtering_rows) for more information on data frame manipulation.
+
+2. Temperature profiles for all the Stations from the Cruise on Sept 11th 2012, with all profiles on the same plot.
+
+    *Hint:* you'll need to convert the station numbers to **factors**. Check out [this lesson from the Data Carpentry R ecology course](https://datacarpentry.org/R-ecology-lesson/02-starting-with-data.html#Factors) for more information on factors.
+
+3. Profiles from all the stations for a cruise and variable of your choice.
+
+
+
+Label all your axes and include the units.
+
+Include a short introduction (a couple of sentences / short paragraph) describing the DaRTS dataset (e.g. oceanographic time series from the Damariscotta River between years XX and YY, measuring variables ZZZZZZZ).
+
+It's up to you how to layout your notebook, but please include:
+
+1. At least two different sections with headers
+2. A list (e.g. of the variables in the data set, or the figures you are going to plot)
