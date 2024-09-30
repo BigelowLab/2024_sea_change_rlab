@@ -1179,3 +1179,17 @@ surfaceData %>% filter(year == 2016) %>%
     ## (`stat_contour_filled()`).
 
 ![](2_Combine_and_Visualize_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
+\## Assignment: Digging into temperature
+
+### Lab 3: Assignment Plots
+
+Using the historical DaRTS data, answer the following questions through
+construction of plots in R.
+
+1.  What is the overall change in temperature year-on-year? (Hint: plot
+    the temperature distribution for each year as a boxplot)
+2.  What is the mean seasonal temperature cycle within a year?
+3.  What is the seasonal change at Station 1? Show each year in a
+    different color.
+4.  What is the seasonal change in temperature at all stations during
+    2016?
