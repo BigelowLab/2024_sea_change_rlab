@@ -1,0 +1,150 @@
+---
+title: "Lab2_live_coding"
+author: "Julia Brown"
+date: "2024-10-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+```
+```{r}
+ctdData <- read.csv("DaRTS_CTD_data.csv")
+discreteData <- read.csv("DaRTS_discrete_data.csv")
+
+
+```
+
+```{r}
+colnames(ctdData)
+
+class(ctdData$Date)
+
+class(discreteData$Date)
+```
+
+```{r}
+library(lubridate)
+```
+Changing dates to "Date" objects using "lubridate"
+
+```{r}
+ctdDates <- lubridate::ymd(ctdData$Date)
+class(ctdDates)
+discreteDates <- lubridate::mdy(discreteData$Date)
+class(discreteDates)
+```
+
+Changing dates within our data tables using mutate
+
+```{r}
+
+# these two lines of code do the same thing
+
+ctdData <- mutate(ctdData, Date = lubridate::ymd(ctdData$Date))
+ctdData <- ctdData %>% mutate(Date = lubridate::ymd(ctdData$Date))
+
+# now to convert our discrete dataframe dates
+discreteData <- discreteData %>% 
+  mutate(Date = lubridate::mdy(discreteData$Date))
+  
+ctdData <- ctdData %>%
+  mutate(year = year(ctdData$Date),
+         month = month(ctdData$Date),
+         day = day(ctdData$Date),
+         doy = yday(ctdData$Date))
+
+discreteData <- discreteData %>%
+  mutate(year = year(discreteData$Date),
+         month = month(discreteData$Date),
+         day = day(discreteData$Date),
+         doy = yday(discreteData$Date))
+
+ctdData$Depth[1:10]
+discreteData$Depth[1:10]
+```
+
+### Binning by Depth
+
+```{r}
+ctdData <- ctdData %>% mutate(Depth = round(ctdData$Depth_m))
+ctdData$Depth
+
+colnames(ctdData) %>% list()
+
+ctdDataBinned <- ctdData %>%
+  group_by(Date, Station, Depth) %>%
+  summarize_all(mean, na.rm = TRUE)
+
+```
+
+
+
+## Table joining
+
+```{r}
+df1 <- data.frame(x = c(1, 2), a = c(3, 4), b = c(9, 8))
+df2 <- data.frame(x = c(1, 3), y = c(1,2))
+df2
+```
+
+```{r}
+# inner join
+
+df_innerjoin <- inner_join(df1, df2)
+df_innerjoin
+
+df_leftjoin <- left_join(df1,df2)
+df_leftjoin
+
+df_rightjoin <- right_join(df1,df2)
+df_rightjoin
+
+df_fulljoin <- full_join(df1, df2)
+df_fulljoin
+
+```
+
+## Joining the discrete data and CTD data together
+
+```{r}
+combinedData <- ctdDataBinned %>%
+  full_join(discreteData)
+
+View(combinedData)
+
+```
+
+**Question**
+How does picoplankton concentration change with temperature?
+
+```{r}
+ggplot(data = combinedData, 
+       aes(x = PP_cells_per_ml, y = Temperature_C)) +
+  geom_point() +
+  scale_x_log10()
+```
+
+```{r}
+surfaceData <- combinedData %>%
+  filter(Depth == 2)
+
+ggplot(surfaceData,
+       aes(x = Date, y = PP_cells_per_ml)) +
+  geom_point()
+```
+
+```{r}
+ggplot(surfaceData, 
+       aes(x = factor(year), y = PP_cells_per_ml)) +
+  geom_boxplot()
+
+```
